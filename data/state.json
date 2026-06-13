@@ -1,0 +1,99 @@
+{
+  "schedules": {
+    "sunday-art": {
+      "last_change_at": "2026-06-07T20:48:06.202338",
+      "active_rule_name": "sunday-art",
+      "last_index": 0,
+      "recently_shown": [
+        "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/DSCF5327.JPG",
+        "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/TV Collections/Collections/5b97aab4-05a7-4b16-a6c6-3614064b90f4/artifacts/frame-final-1777867205497.jpg",
+        "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/2024_1108_13183100_1.jpg"
+      ]
+    },
+    "morning-impressionism": {
+      "last_change_at": "2026-06-13T08:46:31.151021",
+      "active_rule_name": "morning-impressionism",
+      "last_index": 0,
+      "recently_shown": [
+        "1997-08-30",
+        "62371"
+      ]
+    },
+    "default": {
+      "last_change_at": "2026-06-13T08:48:49.178215",
+      "active_rule_name": "default",
+      "last_index": 0,
+      "recently_shown": [
+        "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/DSCF1157.JPG",
+        "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/DSCF1803.JPG",
+        "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/DSCF6741.JPG"
+      ]
+    }
+  },
+  "uploads": {
+    "MY_F0083": {
+      "source_name": "sunday",
+      "source_key": "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/DSCF5327.JPG",
+      "file_hash": "beb4eab5a4a476034b26990cd67a6fe18d5b40faec5df250276b2ba522f224dd",
+      "uploaded_at": "2026-06-07T16:19:07.198803",
+      "expires": false,
+      "ttl_days": 7
+    },
+    "MY_F0084": {
+      "source_name": "sunday",
+      "source_key": "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/TV Collections/Collections/5b97aab4-05a7-4b16-a6c6-3614064b90f4/artifacts/frame-final-1777867205497.jpg",
+      "file_hash": "76c77aa4725b6c520568257785d0015dd4e0f481c8b314f72ba3605545801370",
+      "uploaded_at": "2026-06-07T16:20:14.847354",
+      "expires": false,
+      "ttl_days": 7
+    },
+    "MY_F0085": {
+      "source_name": "sunday",
+      "source_key": "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/2024_1108_13183100_1.jpg",
+      "file_hash": "53ab8b9a6929fbb839791a849e7f8c6aa990e77c99b4e40b469367fdb1f557da",
+      "uploaded_at": "2026-06-07T20:48:06.201357",
+      "expires": false,
+      "ttl_days": 7
+    },
+    "MY_F0086": {
+      "source_name": "nasa",
+      "source_key": "1997-08-30",
+      "file_hash": "82d702a0f4e635e9edb52f30aee755e5b3a24acb09b139424c6f27f57911aee0",
+      "uploaded_at": "2026-06-08T08:55:01.503778",
+      "expires": true,
+      "ttl_days": 7
+    },
+    "MY_F0087": {
+      "source_name": "my_photos",
+      "source_key": "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/DSCF1157.JPG",
+      "file_hash": "dbf311a30b7dc2ef5fff372b4a05ae2d0789dedfb4159dddad2c156c286b985a",
+      "uploaded_at": "2026-06-08T09:11:29.978186",
+      "expires": false,
+      "ttl_days": 7
+    },
+    "MY_F0088": {
+      "source_name": "my_photos",
+      "source_key": "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/DSCF1803.JPG",
+      "file_hash": "9d0c9caea08b25028c7b8a8d834ef7e5fa447a4676773d93458e2a45582bf6cc",
+      "uploaded_at": "2026-06-10T10:29:09.309926",
+      "expires": false,
+      "ttl_days": 7
+    },
+    "MY_F0089": {
+      "source_name": "impressionism",
+      "source_key": "62371",
+      "file_hash": "ae55d3ec6e5f9c806a8b9a106f49eed92a15ee466f1f9b0ed104a33fa83dcfce",
+      "uploaded_at": "2026-06-13T08:46:31.150366",
+      "expires": true,
+      "ttl_days": 7
+    },
+    "MY_F0090": {
+      "source_name": "my_photos",
+      "source_key": "/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper/DSCF6741.JPG",
+      "file_hash": "54891e656440186b1785d5b61cd6f655fda3633fb5f60771a5776f6ab88dc8d5",
+      "uploaded_at": "2026-06-13T08:48:49.177943",
+      "expires": false,
+      "ttl_days": 7
+    }
+  }
+}

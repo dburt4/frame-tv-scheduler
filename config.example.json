@@ -1,0 +1,102 @@
+{
+  "_comment": "Copy this file to config.json and fill in your values.",
+
+  "tv": {
+    "host": "192.168.1.42",
+    "port": 8001,
+    "token_file": "./data/tv_token.txt",
+    "connect_timeout": 10
+  },
+
+  "_api_keys_comment": "API keys required per source — see notes below",
+  "nasa_api_key": "DEMO_KEY",
+
+  "state_file": "./data/state.json",
+
+  "sources": {
+    "my_photos": {
+      "type": "local",
+      "paths": ["/mnt/media/ArtWall"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "travel_photos": {
+      "type": "local",
+      "paths": ["/mnt/media/Travel"],
+      "recursive": false,
+      "extensions": ["jpg", "jpeg"],
+      "expires": false
+    },
+    "nasa": {
+      "_key_comment": "FREE — get a personal key at https://api.nasa.gov/ (no credit card). Set nasa_api_key at the top level of this file. The default DEMO_KEY works at low volume (30 req/hr).",
+      "type": "nasa_apod",
+      "cache_dir": "./data/cache/apod",
+      "cache_days": 30,
+      "expires": true,
+      "ttl_days": 7,
+      "portrait_handling": "skip"
+    },
+    "classics": {
+      "_key_comment": "NO KEY REQUIRED — the Metropolitan Museum API is fully public.",
+      "type": "met_museum",
+      "department_ids": [11, 21],
+      "pool_size": 100,
+      "cache_dir": "./data/cache/met",
+      "expires": true,
+      "ttl_days": 7,
+      "portrait_handling": "blur"
+    },
+    "impressionism": {
+      "_key_comment": "NO KEY REQUIRED — the Art Institute of Chicago API is fully public.",
+      "type": "art_institute",
+      "query": "impressionism",
+      "pool_size": 80,
+      "cache_dir": "./data/cache/aic",
+      "expires": true,
+      "ttl_days": 7,
+      "portrait_handling": "blur"
+    }
+  },
+
+  "schedules": [
+    {
+      "_comment": "Annual date — null interval means: pick one image on Jan 1 and hold it all day. mode is irrelevant when interval_minutes is null.",
+      "name": "new-years-nasa",
+      "date": "01-01",
+      "source": "nasa",
+      "interval_minutes": null
+    },
+    {
+      "_comment": "Date range — rotates through classics every 90 minutes all December. Use interval_minutes: null instead if you want one image held for the whole month.",
+      "name": "december-classics",
+      "date_range": {"start": "12-01", "end": "12-31"},
+      "source": "classics",
+      "mode": "random",
+      "interval_minutes": 90
+    },
+    {
+      "_comment": "Tier 3 — day of week",
+      "name": "weekend-travel",
+      "weekdays": ["saturday", "sunday"],
+      "source": "travel_photos",
+      "mode": "sequential",
+      "interval_minutes": 30
+    },
+    {
+      "_comment": "Tier 4 — time window (same-day only, no midnight wrap in v1)",
+      "name": "morning-impressionism",
+      "time_window": {"start": "06:00", "end": "09:00"},
+      "source": "impressionism",
+      "mode": "random",
+      "interval_minutes": 45
+    },
+    {
+      "_comment": "Default (no condition = always matches, lowest priority)",
+      "name": "default",
+      "source": "my_photos",
+      "mode": "random",
+      "interval_minutes": 60
+    }
+  ]
+}

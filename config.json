@@ -1,0 +1,249 @@
+{
+  "_comment": "Copy this file to config.json and fill in your values.",
+
+  "tv": {
+    "host": "10.0.0.28",
+    "port": 8001,
+    "token_file": "./data/tv_token.txt",
+    "connect_timeout": 10
+  },
+
+  "nasa_api_key": "DEMO_KEY",
+
+  "state_file": "./data/state.json",
+
+  "sources": {
+    "my_photos": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "sunday": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "christmas": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "sunday_christmas": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "star_wars_day": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "easter_sunday": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "4th_of_july": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "pioneer_day": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "halloween": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "thanksgiving": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "valentines_day": {
+      "type": "local",
+      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "recursive": true,
+      "extensions": ["jpg", "jpeg", "png", "webp"],
+      "expires": false
+    },
+    "nasa": {
+      "type": "nasa_apod",
+      "cache_dir": "./data/cache/apod",
+      "cache_days": 30,
+      "expires": true,
+      "ttl_days": 7,
+      "portrait_handling": "skip"
+    },
+    "classics": {
+      "type": "met_museum",
+      "department_ids": [11, 21],
+      "pool_size": 100,
+      "cache_dir": "./data/cache/met",
+      "expires": true,
+      "ttl_days": 7,
+      "portrait_handling": "blur"
+    },
+    "impressionism": {
+      "type": "art_institute",
+      "query": "impressionism",
+      "pool_size": 80,
+      "cache_dir": "./data/cache/aic",
+      "expires": true,
+      "ttl_days": 7,
+      "portrait_handling": "blur"
+    }
+  },
+
+  "schedules": [
+    {
+      "_comment": "Easter Sunday 2026 — moving date, update this each year. 2027: Apr 25. Check https://www.timeanddate.com/holidays/",
+      "name": "easter-sunday",
+      "date": "2026-04-05",
+      "source": "easter_sunday",
+      "mode": "random",
+      "interval_minutes": 60
+    },
+
+    {
+      "_comment": "Christmas Sundays 2026 — listed individually because the scheduler can't combine weekday + date range. Update these each year.",
+      "name": "sunday-christmas-nov29",
+      "date": "2026-11-29",
+      "source": "sunday_christmas",
+      "mode": "random",
+      "interval_minutes": 60
+    },
+    {
+      "name": "sunday-christmas-dec06",
+      "date": "2026-12-06",
+      "source": "sunday_christmas",
+      "mode": "random",
+      "interval_minutes": 60
+    },
+    {
+      "name": "sunday-christmas-dec13",
+      "date": "2026-12-13",
+      "source": "sunday_christmas",
+      "mode": "random",
+      "interval_minutes": 60
+    },
+    {
+      "name": "sunday-christmas-dec20",
+      "date": "2026-12-20",
+      "source": "sunday_christmas",
+      "mode": "random",
+      "interval_minutes": 60
+    },
+    {
+      "name": "sunday-christmas-dec27",
+      "date": "2026-12-27",
+      "source": "sunday_christmas",
+      "mode": "random",
+      "interval_minutes": 60
+    },
+
+    {
+      "_comment": "Star Wars Day — May 4th, annual",
+      "name": "star-wars-day",
+      "date": "05-04",
+      "source": "star_wars_day",
+      "mode": "random",
+      "interval_minutes": null
+    },
+
+    {
+      "_comment": "Valentine's Day — February 14th, annual",
+      "name": "valentines-day",
+      "date": "02-14",
+      "source": "valentines_day",
+      "mode": "random",
+      "interval_minutes": null
+    },
+
+    {
+      "_comment": "4th of July, annual",
+      "name": "4th-of-july",
+      "date": "07-04",
+      "source": "4th_of_july",
+      "mode": "random",
+      "interval_minutes": null
+    },
+
+    {
+      "_comment": "Pioneer Day (Utah) — July 24th, annual",
+      "name": "pioneer-day",
+      "date": "07-24",
+      "source": "pioneer_day",
+      "mode": "random",
+      "interval_minutes": null
+    },
+
+    {
+      "_comment": "Halloween — October 31st, annual",
+      "name": "halloween",
+      "date": "10-31",
+      "source": "halloween",
+      "mode": "random",
+      "interval_minutes": null
+    },
+
+    {
+      "_comment": "Thanksgiving 2026 — moving date (4th Thursday of November). 2026: Nov 26. Update each year.",
+      "name": "thanksgiving",
+      "date": "2026-11-26",
+      "source": "thanksgiving",
+      "mode": "random",
+      "interval_minutes": null
+    },
+
+    {
+      "_comment": "Christmas season — Nov 29 through Dec 31. Sundays in this range are handled by the sunday-christmas rules above.",
+      "name": "christmas",
+      "date_range": {"start": "11-29", "end": "12-31"},
+      "source": "christmas",
+      "mode": "random",
+      "interval_minutes": 90
+    },
+
+    {
+      "_comment": "Every Sunday (non-holiday). Comes after specific holiday dates so Easter etc. take precedence.",
+      "name": "sunday-art",
+      "weekdays": ["sunday"],
+      "source": "sunday",
+      "mode": "random",
+      "interval_minutes": 60
+    },
+
+
+    {
+      "_comment": "Default — used whenever no other rule matches",
+      "name": "default",
+      "source": "my_photos",
+      "mode": "random",
+      "interval_minutes": 60
+    }
+  ]
+}

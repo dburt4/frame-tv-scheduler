@@ -1,0 +1,6 @@
+aiohttp>=3.9.0
+aiofiles>=23.0.0
+pillow>=10.0.0
+pydantic>=2.0.0
+# Samsung TV WebSocket API (extended Frame TV / art mode support)
+samsungtvws[async] @ git+https://github.com/NickWaterton/samsung-tv-ws-api.git
