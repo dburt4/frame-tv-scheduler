@@ -2,6 +2,10 @@
 
 Automatically rotates artwork on your Samsung Frame TV on a schedule. Pulls images from local folders, NASA's Astronomy Picture of the Day, the Metropolitan Museum of Art, and the Art Institute of Chicago.
 
+The idea is for this to run on a home server or something on a cron job.
+
+Yes, this thing was very much vibe coded.
+
 ---
 
 ## Requirements
@@ -54,8 +58,7 @@ Your terminal prompt will change to show `(venv)` at the start. **You need to do
 ### 4. Install dependencies
 
 ```bash
-pip install aiohttp pillow
-pip install git+https://github.com/NickWaterton/samsung-tv-ws-api.git
+pip install -r requirements.txt
 ```
 
 This downloads and installs all the libraries the script needs. It may take a minute or two.
