@@ -15,77 +15,77 @@
   "sources": {
     "my_photos": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/Default"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "sunday": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhoto/Sunday"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "christmas": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/Christmas"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "sunday_christmas": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/ChristmasSunday"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "star_wars_day": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/StarWarsDay"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "easter_sunday": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/EasterSunday"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "4th_of_july": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/4thOfJuly"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "pioneer_day": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/PioneerDay"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "halloween": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/Halloween"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "thanksgiving": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/Thanksgiving"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
     },
     "valentines_day": {
       "type": "local",
-      "paths": ["/Users/dburt/projects/myProjects/wallpaper-app/Wallpaper"],
+      "paths": ["/var/services/homes/TheCaptain/FrameTVPhotos/ValentinesDay"],
       "recursive": true,
       "extensions": ["jpg", "jpeg", "png", "webp"],
       "expires": false
