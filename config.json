@@ -186,7 +186,7 @@
     {
       "_comment": "4th of July, annual",
       "name": "4th-of-july",
-      "date": "07-04",
+      "date_range": {"start": "06-28", "end": "07-07"},
       "source": "4th_of_july",
       "mode": "random",
       "interval_minutes": null
