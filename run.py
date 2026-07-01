@@ -180,6 +180,8 @@ async def main(config_path: str, skip_cache: bool = False) -> None:
         if should_change:
             if not tv_connected:
                 log.warning("TV unavailable; skipping art change")
+            elif not await tv.is_art_mode():
+                log.info("TV is not currently in art mode; skipping art change")
             else:
                 ok = await _rotate_with_fallback(
                     active_rule, default_rule, sources, sources_cfg, tv, state, uploader_mod

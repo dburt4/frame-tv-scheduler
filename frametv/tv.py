@@ -84,6 +84,16 @@ class TVWrapper:
             log.warning("get_current() failed: %s", e)
             return None
 
+    async def is_art_mode(self) -> bool:
+        if not self._art:
+            return False
+        try:
+            mode = await self._art.get_artmode()
+            return mode == "on"
+        except Exception as e:
+            log.warning("get_artmode() failed: %s", e)
+            return False
+
     async def close(self) -> None:
         if self._art:
             try:
