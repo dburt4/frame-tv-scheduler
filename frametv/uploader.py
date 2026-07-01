@@ -77,6 +77,24 @@ def _make_blur_composite(img):
     return bg.convert("RGB")
 
 
+async def _pick_next_item(
+    source: ArtSource,
+    exclude_keys: list[str],
+    last_index: int,
+    mode: str,
+    current_key: str | None,
+) -> tuple[ArtItem | None, int]:
+    item, new_index = await source.get_next(exclude_keys, last_index, mode)
+    if item is None or mode != "random" or not current_key or item.key != current_key:
+        return item, new_index
+
+    log.debug("Random selection matched current image %s; picking again", current_key)
+    retry_item, retry_index = await source.get_next(exclude_keys + [item.key], last_index, mode)
+    if retry_item is not None:
+        return retry_item, retry_index
+    return item, new_index
+
+
 async def rotate_art(
     active_rule: dict,
     source: ArtSource,
@@ -94,8 +112,12 @@ async def rotate_art(
     exclude_keys: list[str] = sched_state.get("recently_shown", [])
     last_index: int = sched_state.get("last_index", 0)
 
+    current_key: str | None = sched_state.get("last_shown_key")
+
     for attempt in range(_MAX_PORTRAIT_RETRIES):
-        item, new_index = await source.get_next(exclude_keys, last_index, mode)
+        item, new_index = await _pick_next_item(
+            source, exclude_keys, last_index, mode, current_key,
+        )
         if item is None:
             log.warning("Source returned no item for rule '%s'", schedule_name)
             return False

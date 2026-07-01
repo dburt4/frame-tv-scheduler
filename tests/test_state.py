@@ -37,6 +37,7 @@ def test_get_schedule_state_defaults(tmp_path):
     ss = state_mod.get_schedule_state(state, "my-rule")
     assert ss["last_change_at"] is None
     assert ss["last_index"] == 0
+    assert ss["last_shown_key"] is None
     assert ss["recently_shown"] == []
 
 
@@ -49,6 +50,7 @@ def test_record_shown_tracks_keys(tmp_path):
     assert "img2.jpg" in ss["recently_shown"]
     assert ss["active_rule_name"] == "default"
     assert ss["last_change_at"] is not None
+    assert ss["last_shown_key"] == "img2.jpg"
 
 
 def test_record_shown_no_duplicates(tmp_path):
@@ -57,6 +59,7 @@ def test_record_shown_no_duplicates(tmp_path):
     state_mod.record_shown(state, "default", "img1.jpg", "random", "default")
     ss = state_mod.get_schedule_state(state, "default")
     assert ss["recently_shown"].count("img1.jpg") == 1
+    assert ss["last_shown_key"] == "img1.jpg"
 
 
 def test_record_shown_respects_max_recent(tmp_path):

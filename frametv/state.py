@@ -35,6 +35,7 @@ def get_schedule_state(state: dict, name: str) -> dict:
         "last_change_at": None,
         "active_rule_name": None,
         "last_index": 0,
+        "last_shown_key": None,
         "recently_shown": [],
     })
 
@@ -43,6 +44,7 @@ def record_shown(state: dict, schedule_name: str, key: str, mode: str, rule_name
     s = get_schedule_state(state, schedule_name)
     s["active_rule_name"] = rule_name
     s["last_change_at"] = datetime.now().isoformat()
+    s["last_shown_key"] = key
     recent: list = s.setdefault("recently_shown", [])
     if key not in recent:
         recent.append(key)
