@@ -12,7 +12,6 @@ log = logging.getLogger(__name__)
 _MAX_PORTRAIT_RETRIES = 10
 _TV_MAX_WIDTH = 3840
 _TV_MAX_HEIGHT = 2160
-_TV_MAX_BYTES = 8 * 1024 * 1024  # 8 MB
 
 
 def _file_hash(path: Path) -> str:
@@ -29,6 +28,7 @@ def prepare_image(local_path: Path, portrait_handling: str) -> Path | None:
 
     img = Image.open(local_path)
     w, h = img.size
+    log.debug("prepare_image: %s — %dx%d", local_path.name, w, h)
 
     is_portrait = h > w
     if is_portrait:
@@ -46,15 +46,8 @@ def prepare_image(local_path: Path, portrait_handling: str) -> Path | None:
     if w > _TV_MAX_WIDTH or h > _TV_MAX_HEIGHT:
         img.thumbnail((_TV_MAX_WIDTH, _TV_MAX_HEIGHT), Image.LANCZOS)
 
-    # Save to temp JPEG
     tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
-    quality = 92
-    img.save(tmp.name, "JPEG", quality=quality, optimize=True)
-    # Reduce quality if over size limit
-    while Path(tmp.name).stat().st_size > _TV_MAX_BYTES and quality > 60:
-        quality -= 8
-        img.save(tmp.name, "JPEG", quality=quality, optimize=True)
-
+    img.save(tmp.name, "JPEG", quality=92, optimize=True)
     return Path(tmp.name)
 
 

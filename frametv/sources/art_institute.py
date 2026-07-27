@@ -52,7 +52,7 @@ class ArtInstituteSource(ArtSource):
         for entry in pool_data.get("entries", []):
             if entry.get("image_id"):
                 img_path = self._cache_dir / f"{entry['id']}.jpg"
-                img_url = f"{_IMG_BASE}/{entry['image_id']}/full/843,/0/default.jpg"
+                img_url = f"{_IMG_BASE}/{entry['image_id']}/full/3840,/0/default.jpg"
                 self._items.append(ArtItem(
                     key=str(entry["id"]),
                     local_path=img_path if img_path.exists() else None,

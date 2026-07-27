@@ -114,7 +114,7 @@ class MetMuseumSource(ArtSource):
                     ) as resp:
                         if resp.status == 200:
                             obj = await resp.json()
-                            url = obj.get("primaryImageSmall") or obj.get("primaryImage")
+                            url = obj.get("primaryImage") or obj.get("primaryImageSmall")
                             if url:
                                 return {
                                     "object_id": oid,
