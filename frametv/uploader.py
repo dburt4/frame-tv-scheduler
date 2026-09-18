@@ -21,7 +21,11 @@ def _file_hash(path: Path) -> str:
 
 
 def prepare_image(local_path: Path, portrait_handling: str) -> Path | None:
-    """Convert image to RGB JPEG for the Frame TV. Returns a temp JPEG path, or None if portrait and mode=skip."""
+    """Prepare image for the Frame TV. Returns a path to upload, or None if portrait and mode=skip.
+
+    Returns the original path unchanged when no conversion is needed (already a JPEG RGB landscape),
+    to avoid lossy re-encoding. Returns a temp file path when conversion is required.
+    """
     from PIL import Image, ImageFilter
 
     img = Image.open(local_path)
@@ -34,12 +38,17 @@ def prepare_image(local_path: Path, portrait_handling: str) -> Path | None:
             return None
         if portrait_handling == "blur":
             img = _make_blur_composite(img)
-            w, h = img.size
+            tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+            img.save(tmp.name, "JPEG", quality=92, optimize=True)
+            return Path(tmp.name)
 
-    # Convert to RGB (handles PNG/WebP with alpha)
+    # Already a JPEG in RGB mode — upload as-is, no re-encoding
+    if local_path.suffix.lower() in (".jpg", ".jpeg") and img.mode == "RGB":
+        return local_path
+
+    # Non-JPEG or non-RGB (e.g. PNG with alpha, WebP) — convert to JPEG
     if img.mode != "RGB":
         img = img.convert("RGB")
-
     tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
     img.save(tmp.name, "JPEG", quality=92, optimize=True)
     return Path(tmp.name)
@@ -140,7 +149,8 @@ async def rotate_art(
             content_id = await tv.upload_and_select(prepared)
             if not content_id:
                 log.warning("Upload failed for item %s", item.key)
-                prepared.unlink(missing_ok=True)
+                if prepared != item.local_path:
+                    prepared.unlink(missing_ok=True)
                 return False
             ok = True
             state_mod.record_upload(state, content_id, {
@@ -152,7 +162,8 @@ async def rotate_art(
                 "ttl_days": ttl_days,
             })
 
-        prepared.unlink(missing_ok=True)
+        if prepared != item.local_path:
+            prepared.unlink(missing_ok=True)
 
         if ok:
             sched_state["last_index"] = new_index
