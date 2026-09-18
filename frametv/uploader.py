@@ -10,8 +10,6 @@ from frametv.tv import TVWrapper
 log = logging.getLogger(__name__)
 
 _MAX_PORTRAIT_RETRIES = 10
-_TV_MAX_WIDTH = 3840
-_TV_MAX_HEIGHT = 2160
 
 
 def _file_hash(path: Path) -> str:
@@ -23,7 +21,7 @@ def _file_hash(path: Path) -> str:
 
 
 def prepare_image(local_path: Path, portrait_handling: str) -> Path | None:
-    """Resize/convert image for the Frame TV. Returns a temp JPEG path, or None if portrait and mode=skip."""
+    """Convert image to RGB JPEG for the Frame TV. Returns a temp JPEG path, or None if portrait and mode=skip."""
     from PIL import Image, ImageFilter
 
     img = Image.open(local_path)
@@ -42,10 +40,6 @@ def prepare_image(local_path: Path, portrait_handling: str) -> Path | None:
     if img.mode != "RGB":
         img = img.convert("RGB")
 
-    # Resize to fit within 3840x2160 preserving aspect ratio
-    if w > _TV_MAX_WIDTH or h > _TV_MAX_HEIGHT:
-        img.thumbnail((_TV_MAX_WIDTH, _TV_MAX_HEIGHT), Image.LANCZOS)
-
     tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
     img.save(tmp.name, "JPEG", quality=92, optimize=True)
     return Path(tmp.name)
@@ -53,7 +47,7 @@ def prepare_image(local_path: Path, portrait_handling: str) -> Path | None:
 
 def _make_blur_composite(img):
     from PIL import Image, ImageFilter, ImageEnhance
-    target_w, target_h = _TV_MAX_WIDTH, _TV_MAX_HEIGHT
+    target_w, target_h = 3840, 2160
     # Create blurred background scaled to fill 16:9
     bg = img.copy().convert("RGB")
     bg = bg.resize((target_w, target_h), Image.LANCZOS)
@@ -128,9 +122,9 @@ async def rotate_art(
             last_index = new_index
             continue
 
-        # Dedup: check if this exact file was already uploaded
+        # Dedup: hash the source file (stable, independent of how we encode it)
         try:
-            fhash = _file_hash(prepared)
+            fhash = _file_hash(item.local_path)
         except OSError as e:
             log.warning("Could not hash %s: %s", prepared, e)
             prepared.unlink(missing_ok=True)

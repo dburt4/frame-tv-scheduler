@@ -52,17 +52,16 @@ def test_portrait_blur_returns_landscape(portrait_jpg):
     result.unlink()
 
 
-def test_large_image_is_resized(tmp_path):
+def test_large_image_passes_through_at_original_size(tmp_path):
     from PIL import Image
-    # Create an image larger than 3840x2160
     img = Image.new("RGB", (5000, 3000), color=(50, 50, 50))
     p = tmp_path / "big.jpg"
     img.save(p, "JPEG")
     result = prepare_image(p, "skip")
     assert result is not None
-    resized = Image.open(result)
-    w, h = resized.size
-    assert w <= 3840 and h <= 2160
+    out = Image.open(result)
+    w, h = out.size
+    assert w == 5000 and h == 3000
     result.unlink()
 
 
