@@ -115,17 +115,8 @@ async def main(config_path: str, skip_cache: bool = False) -> None:
 
     state = state_mod.load_state(state_path)
     now = datetime.now()
-
-    # Initialize all configured sources
     sources_cfg: dict = config.get("sources", {})
-    sources = {}
-    for name, cfg in sources_cfg.items():
-        src = _build_source(name, cfg, nasa_api_key)
-        try:
-            await src.initialize(cfg, skip_cache=skip_cache)
-            sources[name] = src
-        except Exception as e:
-            log.warning("Failed to initialize source '%s': %s", name, e)
+    sources: dict = {}
 
     tv_cfg: dict = config.get("tv", {})
     tv = TVWrapper(tv_cfg)
@@ -137,20 +128,13 @@ async def main(config_path: str, skip_cache: bool = False) -> None:
             log.error("No schedules configured")
             return
 
-        # Expire old API uploads before doing anything else
-        tv_connected = await tv.connect()
-        await expiry_mod.expire_old_uploads(state, tv, now)
-
-        # Evaluate which rule is active right now
+        # Evaluate scheduling and timing before touching any external source
         active_rule = evaluate_active_rule(schedules, now)
+        default_rule = find_default_rule(schedules)
         log.info("Active rule: '%s' (source: %s, mode: %s, interval: %s min)",
                  active_rule["name"], active_rule["source"],
                  active_rule.get("mode", "random"), active_rule.get("interval_minutes"))
 
-        source_name = active_rule["source"]
-        default_rule = find_default_rule(schedules)
-
-        # Determine if we should change the image
         sched_state = state_mod.get_schedule_state(state, active_rule["name"])
         last_rule = sched_state.get("active_rule_name")
         last_change_str = sched_state.get("last_change_at")
@@ -177,12 +161,29 @@ async def main(config_path: str, skip_cache: bool = False) -> None:
             except (ValueError, TypeError):
                 should_change = True
 
+        # Connect to TV for expiry check regardless of should_change
+        tv_connected = await tv.connect()
+        await expiry_mod.expire_old_uploads(state, tv, now)
+
         if should_change:
             if not tv_connected:
                 log.warning("TV unavailable; skipping art change")
             elif not await tv.is_art_mode():
                 log.info("TV is not currently in art mode; skipping art change")
             else:
+                # Only initialize the sources needed for this run
+                needed = {active_rule["source"]}
+                if default_rule and default_rule["source"] != active_rule["source"]:
+                    needed.add(default_rule["source"])
+                for name in needed:
+                    cfg = sources_cfg.get(name, {})
+                    src = _build_source(name, cfg, nasa_api_key)
+                    try:
+                        await src.initialize(cfg, skip_cache=skip_cache)
+                        sources[name] = src
+                    except Exception as e:
+                        log.warning("Failed to initialize source '%s': %s", name, e)
+
                 ok = await _rotate_with_fallback(
                     active_rule, default_rule, sources, sources_cfg, tv, state, uploader_mod
                 )
