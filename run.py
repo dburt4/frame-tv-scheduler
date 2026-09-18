@@ -93,6 +93,11 @@ async def _rotate_with_fallback(active_rule, default_rule, sources, sources_cfg,
 
 
 async def main(config_path: str, skip_cache: bool = False) -> None:
+    log.info("")
+    log.info("=" * 60)
+    log.info("Frame TV run starting")
+    log.info("=" * 60)
+
     config_file = Path(config_path)
     if not config_file.exists():
         log.error("Config file not found: %s", config_path)

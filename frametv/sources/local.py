@@ -21,7 +21,9 @@ class LocalFolderSource(ArtSource):
             if not root_path.exists():
                 continue
             if recursive:
-                for dirpath, _dirs, files in os.walk(root_path, followlinks=False):
+                for dirpath, dirs, files in os.walk(root_path, followlinks=False):
+                    # Skip Synology thumbnail cache (@eaDir) and other hidden/system dirs
+                    dirs[:] = [d for d in dirs if not d.startswith(("@", "."))]
                     for f in files:
                         p = Path(dirpath) / f
                         if p.suffix.lower().lstrip(".") in extensions:

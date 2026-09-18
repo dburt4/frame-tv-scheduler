@@ -41,10 +41,9 @@ class TVWrapper:
         if not self._art:
             return None
         try:
-            with open(local_path, "rb") as f:
-                data = f.read()
-            # upload() returns the content_id assigned by the TV
-            content_id = await self._art.upload(data)
+            # Pass the path as a string so the library derives file_type from the extension.
+            # Passing raw bytes defaults file_type to "png", which corrupts JPEG uploads.
+            content_id = await self._art.upload(str(local_path))
             if content_id:
                 await self._art.select_image(content_id, show=True)
             return content_id
