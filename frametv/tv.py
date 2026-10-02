@@ -1,4 +1,5 @@
 from __future__ import annotations
+import asyncio
 import logging
 from pathlib import Path
 
@@ -40,16 +41,23 @@ class TVWrapper:
     async def upload_and_select(self, local_path: Path) -> str | None:
         if not self._art:
             return None
-        try:
-            # Pass the path as a string so the library derives file_type from the extension.
-            # Passing raw bytes defaults file_type to "png", which corrupts JPEG uploads.
-            content_id = await self._art.upload(str(local_path))
-            if content_id:
-                await self._art.select_image(content_id, show=True)
-            return content_id
-        except Exception as e:
-            log.warning("Upload/select failed: %s", e)
-            return None
+        for attempt in range(3):
+            try:
+                # Pass the path as a string so the library derives file_type from the extension.
+                # Passing raw bytes defaults file_type to "png", which corrupts JPEG uploads.
+                content_id = await self._art.upload(str(local_path))
+                if content_id:
+                    await self._art.select_image(content_id, show=True)
+                return content_id
+            except Exception as e:
+                if attempt < 2:
+                    delay = 2 ** attempt
+                    log.warning("Upload/select failed (attempt %d/3): %s — retrying in %ds", attempt + 1, e, delay)
+                    await asyncio.sleep(delay)
+                else:
+                    log.warning("Upload/select failed after 3 attempts: %s", e)
+                    return None
+        return None
 
     async def select_existing(self, content_id: str) -> bool:
         if not self._art:
@@ -86,12 +94,18 @@ class TVWrapper:
     async def is_art_mode(self) -> bool:
         if not self._art:
             return False
-        try:
-            mode = await self._art.get_artmode()
-            return mode == "on"
-        except Exception as e:
-            log.warning("get_artmode() failed: %s", e)
-            return False
+        for attempt in range(3):
+            try:
+                mode = await self._art.get_artmode()
+                return mode == "on"
+            except Exception as e:
+                if attempt < 2:
+                    log.debug("get_artmode() failed (attempt %d/3): %s — retrying", attempt + 1, e)
+                    await asyncio.sleep(2)
+                else:
+                    log.warning("get_artmode() failed after 3 attempts: %s", e)
+                    return False
+        return False
 
     async def close(self) -> None:
         if self._art:
