@@ -41,21 +41,26 @@ class TVWrapper:
     async def upload_and_select(self, local_path: Path) -> str | None:
         if not self._art:
             return None
+        try:
+            # Pass the path as a string so the library derives file_type from the extension.
+            # Passing raw bytes defaults file_type to "png", which corrupts JPEG uploads.
+            content_id = await self._art.upload(str(local_path))
+        except Exception as e:
+            log.warning("Upload failed: %s", e)
+            return None
+        if not content_id:
+            return content_id
         for attempt in range(3):
             try:
-                # Pass the path as a string so the library derives file_type from the extension.
-                # Passing raw bytes defaults file_type to "png", which corrupts JPEG uploads.
-                content_id = await self._art.upload(str(local_path))
-                if content_id:
-                    await self._art.select_image(content_id, show=True)
+                await self._art.select_image(content_id, show=True)
                 return content_id
             except Exception as e:
                 if attempt < 2:
                     delay = 2 ** attempt
-                    log.warning("Upload/select failed (attempt %d/3): %s — retrying in %ds", attempt + 1, e, delay)
+                    log.warning("select_image failed (attempt %d/3): %s — retrying in %ds", attempt + 1, e, delay)
                     await asyncio.sleep(delay)
                 else:
-                    log.warning("Upload/select failed after 3 attempts: %s", e)
+                    log.warning("select_image failed after 3 attempts: %s", e)
                     return None
         return None
 
