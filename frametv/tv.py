@@ -74,6 +74,15 @@ class TVWrapper:
             log.warning("select_image(%s) failed: %s", content_id, e)
             return False
 
+    async def upload_only(self, local_path: Path) -> str | None:
+        if not self._art:
+            return None
+        try:
+            return await self._art.upload(str(local_path))
+        except Exception as e:
+            log.warning("Upload failed: %s", e)
+            return None
+
     async def delete(self, content_id: str) -> bool:
         if not self._art:
             return False
