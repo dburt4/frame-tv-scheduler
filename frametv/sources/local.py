@@ -8,7 +8,7 @@ _DEFAULT_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp", "gif", "tiff"}
 
 
 def scan_image_files(root: Path, extensions: set[str] = _DEFAULT_EXTENSIONS, recursive: bool = True) -> list[Path]:
-    """Return image files under root, skipping hidden and Synology system dirs."""
+    """Return image files under root, skipping hidden/Synology system dirs and thumbnail files."""
     found: list[Path] = []
     if not root.exists():
         return found
@@ -16,12 +16,14 @@ def scan_image_files(root: Path, extensions: set[str] = _DEFAULT_EXTENSIONS, rec
         for dirpath, dirs, files in os.walk(root, followlinks=False):
             dirs[:] = [d for d in dirs if not d.startswith(("@", "."))]
             for f in files:
+                if f.upper().startswith("SYNOFILE_THUMB"):
+                    continue
                 p = Path(dirpath) / f
                 if p.suffix.lower().lstrip(".") in extensions:
                     found.append(p)
     else:
         for p in root.iterdir():
-            if p.is_file() and p.suffix.lower().lstrip(".") in extensions:
+            if p.is_file() and not p.name.upper().startswith("SYNOFILE_THUMB") and p.suffix.lower().lstrip(".") in extensions:
                 found.append(p)
     found.sort(key=lambda p: p.name.lower())
     return found

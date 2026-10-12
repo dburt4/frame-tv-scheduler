@@ -60,3 +60,7 @@ No linter is configured — no flake8, mypy, or black setup exists.
 **Expiry**: API-sourced uploads can be marked `"expires": true` with a `ttl_days` value so they're auto-deleted from the TV to avoid filling storage.
 
 **State file** (`data/state.json`): Tracks `last_change_at`, `active_rule_name`, `last_index`, `recently_shown` per schedule name, plus a map of `content_id` → upload metadata. Do not manually edit while the script is running.
+
+**Synology NAS gotchas**: Two kinds of hidden files appear in photo directories on Synology:
+- `@eaDir/` subdirectories — Synology's thumbnail cache; filtered by skipping dirs that start with `@` or `.` in `os.walk`.
+- `SYNOFILE_THUMB_*.jpg` files — inline thumbnails Synology writes directly into the photo folder (not in `@eaDir`); filtered by filename prefix in `scan_image_files`. Both filters live in `frametv/sources/local.py:scan_image_files` and must be kept in sync if the scanning logic is ever changed.
