@@ -17,6 +17,7 @@ import argparse
 import asyncio
 import json
 import logging
+import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
@@ -29,14 +30,20 @@ logging.basicConfig(
 )
 log = logging.getLogger("frametv.upload_folder")
 
-_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tiff", ".tif"}
+_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif"}
 
 
 def _scan_folder(folder: Path) -> list[Path]:
-    return sorted(
-        p for p in folder.rglob("*")
-        if p.is_file() and p.suffix.lower() in _IMAGE_EXTENSIONS
-    )
+    found: list[Path] = []
+    for dirpath, dirs, files in os.walk(folder, followlinks=False):
+        # Skip Synology thumbnail cache (@eaDir) and other hidden/system dirs
+        dirs[:] = [d for d in dirs if not d.startswith(("@", "."))]
+        for f in files:
+            p = Path(dirpath) / f
+            if p.suffix.lower().lstrip(".") in _IMAGE_EXTENSIONS:
+                found.append(p)
+    found.sort(key=lambda p: p.name.lower())
+    return found
 
 
 async def _upload_one(
