@@ -7,32 +7,36 @@ from .base import ArtItem, ArtSource
 _DEFAULT_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp", "gif", "tiff"}
 
 
+def scan_image_files(root: Path, extensions: set[str] = _DEFAULT_EXTENSIONS, recursive: bool = True) -> list[Path]:
+    """Return image files under root, skipping hidden and Synology system dirs."""
+    found: list[Path] = []
+    if not root.exists():
+        return found
+    if recursive:
+        for dirpath, dirs, files in os.walk(root, followlinks=False):
+            dirs[:] = [d for d in dirs if not d.startswith(("@", "."))]
+            for f in files:
+                p = Path(dirpath) / f
+                if p.suffix.lower().lstrip(".") in extensions:
+                    found.append(p)
+    else:
+        for p in root.iterdir():
+            if p.is_file() and p.suffix.lower().lstrip(".") in extensions:
+                found.append(p)
+    found.sort(key=lambda p: p.name.lower())
+    return found
+
+
 class LocalFolderSource(ArtSource):
     def __init__(self) -> None:
         self._items: list[ArtItem] = []
 
     async def initialize(self, config: dict, skip_cache: bool = False) -> None:
         extensions = {e.lower().lstrip(".") for e in config.get("extensions", list(_DEFAULT_EXTENSIONS))}
-        paths: list[str] = config.get("paths", [])
         recursive: bool = config.get("recursive", True)
         found: list[Path] = []
-        for root in paths:
-            root_path = Path(root)
-            if not root_path.exists():
-                continue
-            if recursive:
-                for dirpath, dirs, files in os.walk(root_path, followlinks=False):
-                    # Skip Synology thumbnail cache (@eaDir) and other hidden/system dirs
-                    dirs[:] = [d for d in dirs if not d.startswith(("@", "."))]
-                    for f in files:
-                        p = Path(dirpath) / f
-                        if p.suffix.lower().lstrip(".") in extensions:
-                            found.append(p)
-            else:
-                for p in root_path.iterdir():
-                    if p.is_file() and p.suffix.lower().lstrip(".") in extensions:
-                        found.append(p)
-        # Sort deterministically for stable sequential ordering
+        for root in config.get("paths", []):
+            found.extend(scan_image_files(Path(root), extensions, recursive))
         found.sort(key=lambda p: p.name.lower())
         self._items = [ArtItem(key=str(p), local_path=p, title=p.stem) for p in found]
 
